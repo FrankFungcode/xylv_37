@@ -1,0 +1,22 @@
+{
+  "name": "xylv_37",
+  "version": "1.0.0",
+  "description": "My legendary Nuxt.js project",
+  "author": "Frank_Feng",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "@nuxtjs/axios": "^5.8.0",
+    "@nuxtjs/pwa": "^3.0.0-0",
+    "element-ui": "^2.12.0",
+    "less": "^3.10.3",
+    "less-loader": "^5.0.0",
+    "nuxt": "^2.0.0"
+  },
+  "devDependencies": {}
+}
