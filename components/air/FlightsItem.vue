@@ -1,60 +1,76 @@
 
 <template>
   <div class="flights_item">
-    <div class="item_main">
-      <div class="item_name">上航FM9316</div>
+    <div @click="isShow=!isShow"  class="item_main">
+      <div class="item_name">{{data.airline_name}}{{data.flight_no}}-- {{data.plane_size}}</div>
       <div class="item_depart_date">
-        <p>19:30</p>
-        <p>白云机场T1</p>
+        <p>{{data.dep_time}}</p>
+        <p>{{data.org_airport_name}} {{data.org_airport_quay}}</p>
       </div>
-      <div class="duration">2时20分</div>
+      <div class="duration">{{duration}}</div>
       <div class="item_dest_date">
-        <p>19:30</p>
-        <p>白云机场T1</p>
+        <p>{{data.arr_time}}</p>
+        <p>{{data.dst_airport_name}}{{data.dst_airport_quay}}</p>
       </div>
       <div class="item_price">
         <p>
           ￥
-          <span>800</span>起
+          <span>{{data.base_price*0.3}}</span>起
         </p>
       </div>
     </div>
-
-    <div class="item_info">
+    <div v-show="isShow" class="item_info">
       <div class="item_low">低价推荐</div>
       <div class="item_seat">
-        <div class="seat_row">
+        <!-- 循环来 显示 -->
+        <div class="seat_row" v-for="(item,index) in data.seat_infos" :key="index">
           <div class="seat_row_name">
-            <span>经济舱</span> | 上海一诺千金航空服务有限公司
+            <span>{{item.name}}</span>
+            | {{item.supplierName}}
           </div>
-          <div class="seat_row_price">$1999</div>
+          <div class="seat_row_price">￥{{item.settle_price}}</div>
           <div class="seat_row_btns">
             <div>
               <el-button type="warning" size="mini">选定</el-button>
-              <p>剩余:99</p>
-            </div>
-          </div>
-        </div>
-        <div class="seat_row">
-          <div class="seat_row_name">
-            <span>经济舱</span> | 上海一诺千金航空服务有限公司
-          </div>
-          <div class="seat_row_price">$1999</div>
-          <div class="seat_row_btns">
-            <div>
-              <el-button type="warning" size="mini">选定</el-button>
-              <p>剩余:99</p>
+              <p>剩余{{item.discount}}</p>
             </div>
           </div>
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  data () {
+    return {
+      isShow:false
+    }
+  },
+  props: {
+    data: {
+      type: Object,
+      default: {}
+    }
+  },
+  computed: {
+    duration() {
+      // 两个时间格式 是可以 做减法运算的 时间比较复杂的时候
+      let startTime = this.data.dep_datetime;
+      let endTime = this.data.arr_datetime;
+      let startDate = new Date(startTime);
+      let endDate = new Date(endTime);
+      // duration 格式 一个数字 毫秒
+      let duration = endDate - startDate;
+      // 1. 差几个小时
+      let hour = parseInt(duration / 1000 / 60 / 60);
+      // 2. 差几分种
+      let minutes = duration / 1000 / 60 - hour * 60;
+      return `${hour}时${minutes}分`
+    }
+  }
+};
 </script>
 
 <style lang="less" scoped>
@@ -81,7 +97,7 @@ export default {};
     .item_depart_date,
     .item_dest_date {
       p:nth-child(1) {
-        font-size: 18px;
+        font-size: 25px;
       }
       p:nth-child(2) {
         font-size: 12px;
@@ -123,7 +139,7 @@ export default {};
         height: 70px;
         display: flex;
         border-bottom: 1px solid #000;
-        &:last-child{
+        &:last-child {
           border-bottom: none;
         }
         > div {
@@ -134,7 +150,7 @@ export default {};
         .seat_row_name {
           flex: 4;
           font-size: 13px;
-          span{
+          span {
             color: green;
           }
         }

@@ -58,9 +58,9 @@ export default {
       currentIndex: 0,
       form: {
         // 出发城市
-        departCity: "广州",
+        departCity: "北京",
         // 出发城市代码
-        departCode: "CAN",
+        departCode: "BJS",
         // 目标城市
         destCity: "上海",
         // 目标城市代码
@@ -83,6 +83,7 @@ export default {
 
             let cityArr=res.data.data;
             cityArr.forEach(v=>{
+              console.log(v);
               // 把广州市的 "市" 字移除 因为 后台数据不含有"市"
               v.name=v.name.replace("市","")
               v.value=v.name;
@@ -93,22 +94,23 @@ export default {
     },
     // 2. 点击 出发城市
     handleSelect1(item) {
-      console.log(item);
+      // console.log(item);
       this.form.departCode=item.sort
     },
     // 3. 点击目标城市
     handleSelect2(item) {
-      console.log(item);
+      // console.log(item);
       this.form.destCode=item.sort
     },
     // 4. 点击换，交换城市,编码
     handleCityChange(){
-      let form = JSON.parse(JSON.stringify(this.form))
+      // let form = JSON.parse(JSON.stringify(this.form))
       // this.form.departCity=form.destCity;
       // this.form.departCode=form.destCode;
       // this.form.destCity=form.departCity;
       // this.form.destCode=form.departCode;
       // -----------LOW!!!----------------
+      // ES6 交换
       [this.form.departCity,this.form.departCode,this.form.destCity,this.form.destCode]=[this.form.destCity,this.form.destCode,this.form.departCity,this.form.departCode]
     },
     // 5点击搜索

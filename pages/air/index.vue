@@ -9,7 +9,7 @@
         <SearchForm/>
       </div>
       <div class="air_img">
-        <img src="http://157.122.54.189:9093/images/pic_sale.jpeg" alt>
+        <img src="http://157.122.54.189:9093/images/pic_sale.jpeg" alt="">
       </div>
     </div>
   </div>

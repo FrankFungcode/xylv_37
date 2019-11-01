@@ -20,7 +20,8 @@
             <el-dropdown-item>消息</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <nuxt-link to="/user/login" class="login_link">
+
+        <nuxt-link to="/user/login/0" class="login_link">
           <div v-if="userinfo.token" class="login_user">
             <el-dropdown>
               <div class="el-dropdown-link">
@@ -31,12 +32,11 @@
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item>个人中心</el-dropdown-item>
                 <el-dropdown-item>
-                  <div class="handleLogout">退出</div>
+                  <div @click="handleLogout">退出</div>
                 </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </div>
-
           <div v-else class="login_text">登陆 / 注册</div>
         </nuxt-link>
       </div>
@@ -55,7 +55,7 @@ export default {
     let userStr=localStorage.getItem("userinfo")
     if (userStr) {
       // 存在
-      let userStr=JSON.parse(userStr);
+      let userinfo=JSON.parse(userStr);
       // 把值设置到vuex
       this.$store.commit('user/setUser', userinfo)
     }
@@ -69,7 +69,7 @@ export default {
     this.$message.success("退出成功")
     setTimeout(() => {
       this.$router.push("/user/login/0")
-    }, 500); 
+    }, 1000); 
   } 
  }
 };
@@ -147,7 +147,7 @@ export default {
 
 .login_user {
   .el-dropdown-link {
-    .img {
+    img {
       width: 36px;
     }
     display: flex;

@@ -1,12 +1,12 @@
 <template>
   <div class="flights_filter">
     <div class="filter_main">
-      <div class="main_path">单程: 广州-上海/ 2019-10-28</div>
+      <div class="main_path">单程: {{info.departCity}} - {{info.destCity}} / {{info.departDate}} </div>
       <div class="main_selects">
         <div class="select_item">
-          <el-select placeholder="请选择" size="mini">
+          <el-select placeholder="起飞机场" size="mini" v-model="airport" @change="filterChange">
             <el-option
-              v-for="item in  [{ value: '选项1', label: '黄金糕' }]"
+              v-for="item in filterOptions.airport"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -14,9 +14,9 @@
           </el-select>
         </div>
         <div class="select_item">
-          <el-select placeholder="请选择" size="mini">
+          <el-select placeholder="起飞时间" size="mini" v-model="flightTimes" @change="filterChange">
             <el-option
-              v-for="item in  [{ value: '选项1', label: '黄金糕' }]"
+              v-for="item in filterOptions.flightTimes"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -24,9 +24,9 @@
           </el-select>
         </div>
         <div class="select_item">
-          <el-select placeholder="请选择" size="mini">
+          <el-select placeholder="航空公司" size="mini" v-model="company" @change="filterChange">
             <el-option
-              v-for="item in  [{ value: '选项1', label: '黄金糕' }]"
+              v-for="item in filterOptions.company"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -34,9 +34,9 @@
           </el-select>
         </div>
         <div class="select_item">
-          <el-select placeholder="请选择" size="mini">
+          <el-select placeholder="请选择" size="mini" v-model="sizes" @change="filterChange">
             <el-option
-              v-for="item in  [{ value: '选项1', label: '黄金糕' }]"
+              v-for="item in filterOptions.sizes"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -47,36 +47,102 @@
     </div>
     <div class="filters_btns">
       筛选:
-      <el-button type="primary" round size="mini">撤销</el-button>
+      <el-button type="primary" round size="mini" @click="handleClick">撤销</el-button>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  props: {
+    info: {
+      type: Object,
+      default: {}
+    },
+    options: {
+      type: Object,
+      default: {}
+    }
+  },
+  computed: {
+    filterOptions() {
+      // 起飞机场
+      // let airport=this.options.airport.map(v=>({value:v,label:v}))
+      let airport = [];
+      this.options.airport.forEach(v => {
+        v && airport.push({ value: v, label: v });
+      });
+      // 起飞时间
+      let flightTimes = this.options.flightTimes.map(v => ({
+        label: `${v.from}:00 - ${v.to}:00`,
+        value: v.from + "|" + v.to //6|10
+      }));
+      // 航空公司
+      let company = this.options.company.map(v => ({
+        value: v,
+        label: v
+      }));
+      // 机型
+      let sizes = [
+        { value: "L", label: "大" },
+        { value: "M", label: "中" },
+        { value: "S", label: "小" }
+      ];
+      return { airport, flightTimes, company, sizes };
+    }
+  },
+  methods: {
+    handleClick() {
+      // console.log(this.airport, this.flightTimes, this.company, this.sizes);
+    },
+    // 下拉框值改变时间
+    filterChange(){
+      // console.log(this.airport, this.flightTimes, this.company, this.sizes);
+      // 把选中的值发送到父组件即可
+      let filter ={
+        airport:this.airport,
+        flightTimes:this.flightTimes,
+        company:this.company,
+        sizes:this.sizes,
+      }
+      this.$emit("filterChange",filter)
+    }
+  },
+  data() {
+    return {
+      // 起飞机场默认值
+      airport: "",
+      // 起飞时间
+      flightTimes: "",
+      // 航空公司
+      company: "",
+      // 机型
+      sizes: ""
+    };
+  }
+};
 </script>
 
 <style lang="less" scoped>
-.flights_filter{
-
-  .filter_main{
+.flights_filter {
+  .filter_main {
     height: 56px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    .main_path{
+    .main_path {
       font-size: 13px;
     }
-    .main_selects{
+    .main_selects {
       display: flex;
-      
-      .select_item{
+
+      .select_item {
         width: 120px;
         margin-left: 5px;
       }
     }
   }
-  .filters_btns{
+  .filters_btns {
     padding: 10px 0;
   }
 }
